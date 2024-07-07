@@ -3,3 +3,5 @@ backend/week-1/.env
 machine-learning/week-2/sales-forecasting.zip
 machine-learning/week-2/train.csv
 machine-learning/week-2/lightning_logs
+/backend/myenv
+backend/.env
