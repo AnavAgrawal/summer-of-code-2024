@@ -29,7 +29,7 @@ def add_item():
             return (f"Item named {data['Item_Name']} added successfully")  
 
 # Delete item from inventory
-@products_bp.post('/delete_item')
+@products_bp.delete('/delete_item')
 def delete_item():
     data = request.json
     with conn:
