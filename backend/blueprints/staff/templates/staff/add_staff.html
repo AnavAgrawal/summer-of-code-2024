@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Staff</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-center">Add Staff</h1>
+                <form action="{{ url_for('staff.add_staff') }}" method="POST">
+                    <div class="form-group">
+                        <label for="s_username">Username</label>
+                        <input type="text" name="s_username" class="form-control" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                        <label for="s_email">Email</label>
+                        <input type="email" name="s_email" class="form-control" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <label for="s_contact">Contact</label>
+                        <input type="text" name="s_contact" class="form-control" placeholder="Contact">
+                    </div>
+                    <div class="form-group">
+                        <label for="s_password">Password</label>
+                        <input type="password" name="s_password" class="form-control" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="s_isadmin">Admin</label>
+                        <select name="s_isadmin" class="form-control">
+                            <option value="True">Yes</option>
+                            <option value="False">No</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Add Staff</button>
+                </form>
+                <a href="{{ url_for('staff.home') }}" class="btn btn-secondary btn-block mt-3">Go Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

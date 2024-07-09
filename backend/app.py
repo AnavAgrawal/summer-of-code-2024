@@ -4,6 +4,8 @@ import os
 from database import login_manager, bcrypt, db, InventoryItem, Customer, Staff, Transaction
 from blueprints.products.products import products_bp
 from blueprints.login.login import login_bp
+from blueprints.customers.customers import customers_bp
+from blueprints.staff.staff import staff_bp
 
 def create_app():
     app = Flask(__name__)
@@ -27,6 +29,8 @@ def create_app():
 
     app.register_blueprint(login_bp)
     app.register_blueprint(products_bp, url_prefix='/products')
+    app.register_blueprint(customers_bp, url_prefix='/customers')
+    app.register_blueprint(staff_bp, url_prefix='/staff')
     
     return app
 

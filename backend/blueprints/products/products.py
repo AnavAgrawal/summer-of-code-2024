@@ -1,7 +1,14 @@
 from flask import Blueprint, request, render_template, redirect, url_for
 from database import db, InventoryItem
+from flask_login import current_user
 
 products_bp = Blueprint('products', __name__, template_folder='templates')
+
+# Check if user is logged in before accessing any routes
+@products_bp.before_request
+def before_request():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login.login')) 
 
 @products_bp.route('/')
 def home():
@@ -28,7 +35,7 @@ def update_item(item_id):
         item.item_price = request.form['item_price']
         item.item_qty = request.form['item_qty']
         db.session.commit()
-        return redirect(url_for('products.view_all'))
+        return redirect(url_for('products.home'))
     return render_template('products/update_item.html', item=item)
 
 @products_bp.route('/delete_item/<int:item_id>', methods=['POST'])
@@ -37,38 +44,4 @@ def delete_item(item_id):
     db.session.delete(item)
     db.session.commit()
     return redirect(url_for('products.home'))
-
-# # Update item quantity
-# @products_bp.post('/update_quantity')
-# def update_item():
-#     data = request.json
-#     item = InventoryItem.query.filter_by(item_name=data['Item_Name']).first()
-#     if not item:
-#         return f"Item with name {data['Item_Name']} does not exist"
-    
-#     item.item_qty = data['Item_Qty']
-#     db.session.commit()
-#     return f"Item with name {data['Item_Name']} updated successfully"
-
-# # Update item price
-# @products_bp.post('/update_price')
-# def update_price():
-#     data = request.json
-#     item = InventoryItem.query.filter_by(item_name=data['Item_Name']).first()
-#     if not item:
-#         return f"Item with name {data['Item_Name']} does not exist"
-    
-#     item.item_price = data['Item_Price']
-#     db.session.commit()
-#     return f"Item with name {data['Item_Name']} updated successfully"
-
-# Get item details
-@products_bp.post('/get_item')
-def get_item():
-    data = request.json
-    item = InventoryItem.query.filter_by(item_name=data['Item_Name']).first()
-    if not item:
-        return f"Item with name {data['Item_Name']} does not exist"
-    
-    return f"Item Name: {item.item_name}<br>Item Description: {item.item_description}<br>Item Price: {item.item_price}<br>Item Quantity: {item.item_qty}"
 

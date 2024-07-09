@@ -6,6 +6,8 @@ login_bp = Blueprint('login', __name__, template_folder='templates')
 
 @login_bp.route('/')
 def index():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login.login'))
     return render_template('login/home.html')
 
 @login_bp.route('/register', methods=['GET', 'POST'])
