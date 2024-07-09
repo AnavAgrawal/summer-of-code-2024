@@ -1,55 +1,32 @@
 from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 import dotenv
 import os
-from products import products_bp
+from database import db, InventoryItem, Customer, Staff, Transaction
+from blueprints.products import products_bp
 
-# get url from .env file
-dotenv.load_dotenv()
-url = os.getenv('DATABASE_URL')
+bcrypt = Bcrypt()
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = url
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-app.register_blueprint(products_bp, url_prefix='/products')
+def create_app():
+    app = Flask(__name__)
+    
+    # get url from .env file
+    dotenv.load_dotenv()
+    url = os.getenv('DATABASE_URL')
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = url
+    db.init_app(app)
+    bcrypt.init_app(app)
+    app.register_blueprint(products_bp, url_prefix='/products')
+    
+    return app
 
-class InventoryItem(db.Model):
-    Item_SKU = db.Column(db.Integer, primary_key=True)
-    Item_Name = db.Column(db.String, nullable=False)
-    Item_Description = db.Column(db.String, nullable=False)
-    Item_Price = db.Column(db.Integer, nullable=False)
-    Item_Qty = db.Column(db.Integer, nullable=False)
+def setup_db(app):
 
-class Customer(db.Model):
-    c_ID = db.Column(db.Integer, primary_key=True)
-    c_name = db.Column(db.String, nullable=False)
-    c_email = db.Column(db.String, nullable=False)
-    c_contact = db.Column(db.String, nullable=False)
+    with app.app_context():
+        db.create_all()
 
-class Staff(db.Model):
-    s_ID = db.Column(db.Integer, primary_key=True)
-    s_name = db.Column(db.String, nullable=False)
-    s_email = db.Column(db.String, nullable=False)
-    s_isAdmin = db.Column(db.Boolean, nullable=False)
-    s_contact = db.Column(db.String, nullable=False)
-    pass_hash = db.Column(db.Text, nullable=False)
-
-class Transaction(db.Model):
-    t_ID = db.Column(db.Integer, primary_key=True)
-    c_ID = db.Column(db.Integer, db.ForeignKey('customer.c_ID'), nullable=False)
-    Item_SKU = db.Column(db.Integer, db.ForeignKey('inventory_item.Item_SKU'), nullable=False)
-    s_ID = db.Column(db.Integer, db.ForeignKey('staff.s_ID'), nullable=False)
-    t_Date = db.Column(db.Date, nullable=False)
-    t_Amount = db.Column(db.Integer, nullable=False)
-    t_Category = db.Column(db.String, nullable=False)
-
-
-@app.get('/')
-def get_inventory():
-    inventory = InventoryItem.query.all()
-    return str(inventory)
+app = create_app()
 
 @app.post('/add_customer')
 def add_customer():
@@ -62,11 +39,11 @@ def add_customer():
 @app.post('/add_staff')
 def add_staff():
     data = request.json
-    pass_hash = bcrypt.generate_password_hash(data['password']).decode('utf-8')
-    new_staff = Staff(s_name=data['s_name'], s_email=data['s_email'], s_isAdmin=data['s_isAdmin'], s_contact=data['s_contact'], pass_hash=pass_hash)
+    pass_hash = bcrypt.generate_password_hash(data['s_password']).decode('utf-8')
+    new_staff = Staff(s_username=data['s_username'], s_email=data['s_email'], s_isadmin=data['s_isadmin'], s_contact=data['s_contact'], s_password=pass_hash)
     db.session.add(new_staff)
     db.session.commit()
-    return f"Staff named {data['s_name']} added successfully"
+    return f"Staff with username {data['s_username']} added successfully"
 
 @app.post('/add_transaction')
 def add_transaction():
@@ -79,21 +56,20 @@ def add_transaction():
     if not staff:
         return "Staff not found"
     
-    item = InventoryItem.query.filter_by(Item_Name=data['Item_Name']).first()
+    item = InventoryItem.query.filter_by(item_name=data['Item_Name']).first()
     if not item:
         return "Item not found"
 
-    new_transaction = Transaction(c_ID=customer.c_ID, Item_SKU=item.Item_SKU, s_ID=staff.s_ID, t_Date=data['t_Date'], t_Amount=data['t_Amount'], t_Category=data['t_Category'])
+    new_transaction = Transaction(c_id=customer.c_id, item_sku=item.item_sku, s_id=staff.s_id, t_date=data['t_date'], t_amount=data['t_amount'], t_category=data['t_category'])
     db.session.add(new_transaction)
     db.session.commit()
     return f"Transaction for item {data['Item_Name']} added successfully"
 
 @app.get('/total_sales')
 def get_sales():
-    total_sales = db.session.query(db.func.sum(Transaction.t_Amount)).scalar()
+    total_sales = db.session.query(db.func.sum(Transaction.t_amount)).scalar()
     return f"Total sales done are Rs. {total_sales}"
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
+    setup_db(app)
     app.run(debug=True)
