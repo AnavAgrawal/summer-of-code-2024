@@ -1,5 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 
+login_manager = LoginManager()
+bcrypt = Bcrypt()
 db = SQLAlchemy()
 
 class InventoryItem(db.Model):
@@ -17,7 +22,7 @@ class Customer(db.Model):
     c_email = db.Column(db.String, nullable=False)
     c_contact = db.Column(db.String, nullable=False)
 
-class Staff(db.Model):  
+class Staff(db.Model, UserMixin):  
     __tablename__ = 'staff'
     s_id = db.Column(db.Integer, primary_key=True)
     s_username = db.Column(db.String, nullable=False)
@@ -25,6 +30,12 @@ class Staff(db.Model):
     s_password = db.Column(db.Text, nullable=False)
     s_contact = db.Column(db.String, nullable=False)
     s_isadmin = db.Column(db.Boolean, nullable=False)
+
+    def __repr__(self):
+        return f'<Staff : {self.s_username}, Admin? : {self.s_isadmin}>'
+    
+    def get_id(self):
+        return str(self.s_id)
 
 class Transaction(db.Model):
     __tablename__ = 'transaction'

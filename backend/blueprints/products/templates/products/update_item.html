@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Item</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-center">Update Item</h1>
+                <form action="{{ url_for('products.update_item', item_id=item.item_sku) }}" method="POST">
+                    <div class="form-group">
+                        <label for="item_name">Item Name</label>
+                        <input type="text" name="item_name" class="form-control" value="{{ item.item_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="item_description">Item Description</label>
+                        <input type="text" name="item_description" class="form-control" value="{{ item.item_description }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="item_price">Item Price</label>
+                        <input type="number" name="item_price" class="form-control" value="{{ item.item_price }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="item_qty">Item Quantity</label>
+                        <input type="number" name="item_qty" class="form-control" value="{{ item.item_qty }}">
+                    </div>
+                    <button type="submit" class="btn btn-warning btn-block">Update Item</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                {% if current_user.is_authenticated %}
+                    <p class="text-success">Hi, you are logged in as {{ current_user.s_username }}!</p>
+                    <a href="{{ url_for('products.home') }}" class="btn btn-primary">Manage Inventory</a>
+                    {% if current_user.s_isadmin %}
+                        <a href="{{ url_for('login.register') }}" class="btn btn-secondary">Add Staff Member</a>
+                    {% endif %}
+                    <a href="{{ url_for('login.logout') }}" class="btn btn-danger">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login.login') }}" class="btn btn-primary">Login</a>
+                {% endif %}
+                {% if error %}
+                    <p class="text-danger mt-3">{{ error }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

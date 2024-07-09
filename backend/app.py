@@ -1,11 +1,9 @@
 from flask import Flask, request
-from flask_bcrypt import Bcrypt
 import dotenv
 import os
-from database import db, InventoryItem, Customer, Staff, Transaction
-from blueprints.products import products_bp
-
-bcrypt = Bcrypt()
+from database import login_manager, bcrypt, db, InventoryItem, Customer, Staff, Transaction
+from blueprints.products.products import products_bp
+from blueprints.login.login import login_bp
 
 def create_app():
     app = Flask(__name__)
@@ -15,8 +13,19 @@ def create_app():
     url = os.getenv('DATABASE_URL')
     
     app.config['SQLALCHEMY_DATABASE_URI'] = url
+    app.config['SECRET_KEY'] = 'secret'
+    app.config['EXPLAIN_TEMPLATE_LOADING'] = True
+
     db.init_app(app)
     bcrypt.init_app(app)
+
+    login_manager.init_app(app)
+        
+    @login_manager.user_loader
+    def load_user(user_id):
+        return Staff.query.get(int(user_id))
+
+    app.register_blueprint(login_bp)
     app.register_blueprint(products_bp, url_prefix='/products')
     
     return app
