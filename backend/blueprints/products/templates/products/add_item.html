@@ -10,7 +10,7 @@
     <div class="container mt-5">
         <div class="card">
             <div class="card-body">
-                <p class="text-primary">Hey {{ current_user.s_username }}, here you can add a new item to your inventory</p>
+                <h2 class="text-center">Add Item</h2>
                 <form action="{{ url_for('products.add_item') }}" method="POST">
                     <div class="form-group">
                         <label for="item_name">Item Name</label>

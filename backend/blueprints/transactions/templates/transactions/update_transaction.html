@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Transaction</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script>
+        function updateAmount() {
+            var itemDropdown = document.getElementById('item_name');
+            var selectedItem = itemDropdown.options[itemDropdown.selectedIndex];
+            var price = selectedItem.getAttribute('data-price');
+            document.getElementById('t_amount').value = price;
+        }
+    </script>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="text-center">Update Transaction</h2>
+                <form action="{{ url_for('transactions.update_transaction', transaction_id=transaction.t_id) }}" method="POST">
+                    <div class="form-group">
+                        <label for="c_id">Customer Name</label>
+                        <select name="c_id" class="form-control">
+                            <option value="" disabled>Select a customer</option>
+                            {% for customer in customers %}
+                                <option value="{{ customer.c_id }}" {{ 'selected' if customer.c_id == transaction.c_id else '' }}>{{ customer.c_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="s_name">Staff Name</label>
+                        <input type="text"  name="s_name" class="form-control" placeholder="Staff Name">
+                    </div> -->
+                    <div class="form-group">
+                        <label for="item_sku">Item Name</label>
+                        <select name="item_sku" id="item_name" class="form-control" onchange="updateAmount()">
+                            <option value="" disabled>Select an item</option>
+                            {% for item in items %}
+                                <option value="{{ item.item_sku }}" data-price="{{ item.item_price }}" {{ 'selected' if item.item_sku == transaction.item_sku else '' }}>{{ item.item_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="t_date">Date</label>
+                        <input type="date" name="t_date" class="form-control" value="{{ transaction.t_date }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="t_time">Time</label>
+                        <input type="text" name="t_time" class="form-control" value="{{ transaction.t_time }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="t_amount">Amount</label>
+                        <input type="number" name="t_amount" id="t_amount" class="form-control" value="{{ transaction.t_amount }}">
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Update Transaction</button>
+                </form>
+                <a href="{{ url_for('transactions.home') }}" class="btn btn-secondary btn-block mt-3">Go Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

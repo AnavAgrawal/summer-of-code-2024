@@ -27,6 +27,7 @@
                 {% if current_user.s_isadmin %}
                 <a href="{{ url_for('staff.home') }}" class="btn btn-primary my-1" style="width: auto; min-width: 250px;">Manage Staff</a> <br>
                 {% endif %}
+                <a href="{{ url_for('transactions.home') }}" class="btn btn-primary my-1" style="width: auto; min-width: 250px;">Manage Transactions</a> <br>
                 <a href="{{ url_for('login.logout') }}" class="btn btn-danger my-1" style="width: auto; min-width: 250px;">Logout</a>
 
                 {% if error %}

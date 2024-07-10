@@ -44,4 +44,5 @@ class Transaction(db.Model):
     item_sku = db.Column(db.Integer, db.ForeignKey('inventoryitem.item_sku'), nullable=False)
     s_id = db.Column(db.Integer, db.ForeignKey('staff.s_id'), nullable=False)
     t_date = db.Column(db.Date, nullable=False)
+    t_time = db.Column(db.Time, nullable=False)
     t_amount = db.Column(db.Integer, nullable=False)

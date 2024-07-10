@@ -29,7 +29,7 @@
                             <td>{{ staff.s_contact }}</td>
                             <td>{{ 'Yes' if staff.s_isadmin else 'No' }}</td>
                             <td>
-                                {% if not staff.s_isadmin %}
+                                {% if not staff.s_isadmin or staff.s_id == current_user.s_id %}
                                 <a href="{{ url_for('staff.update_staff', staff_id=staff.s_id) }}" class="btn btn-warning btn-sm">Update</a>
                                 <form action="{{ url_for('staff.delete_staff', staff_id=staff.s_id) }}" method="POST" style="display:inline;">
                                     <input type="submit" value="Delete" class="btn btn-danger btn-sm">

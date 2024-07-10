@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="text-center">Transactions</h2>
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Customer Name</th>
+                            <th>Item Name</th>
+                            <th>Staff Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions_data %}
+                        <tr>
+                            <td>{{ transaction.customer.c_name }}</td>
+                            <td>{{ transaction.item.item_name }}</td>
+                            <td>{{ transaction.staff.s_username }}</td>
+                            <td>{{ transaction.transaction.t_date }}</td>
+                            <td>{{ transaction.transaction.t_time }}</td>
+                            <td>{{ transaction.transaction.t_amount }}</td>
+                            <td>
+                                <a href="{{ url_for('transactions.update_transaction', transaction_id=transaction.transaction.t_id) }}" class="btn btn-warning btn-sm">Update</a>
+                                <form action="{{ url_for('transactions.delete_transaction', transaction_id=transaction.transaction.t_id) }}" method="POST" style="display:inline;">
+                                    <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <a href="{{ url_for('transactions.add_transaction') }}" class="btn btn-success">Add Transaction</a>
+                    <a href="{{ url_for('login.index') }}" class="btn btn-secondary">Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
