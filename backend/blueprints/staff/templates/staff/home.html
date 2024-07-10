@@ -10,7 +10,7 @@
     <div class="container mt-5">
         <div class="card">
             <div class="card-body">
-                <h1 class="text-center">Staff Management</h1>
+                <h2 class="text-center">Staff Management</h1>
                 <table class="table table-striped">
                     <thead class="thead-dark">
                         <tr>
@@ -40,8 +40,10 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <a href="{{ url_for('staff.add_staff') }}" class="btn btn-success">Add Staff</a>
-                <a href="{{ url_for('login.index') }}" class="btn btn-secondary">Home</a>
+                <div class="text-center">
+                    <a href="{{ url_for('staff.add_staff') }}" class="btn btn-success">Add Staff</a>
+                    <a href="{{ url_for('login.index') }}" class="btn btn-secondary">Home</a>
+                </div>
             </div>
         </div>
     </div>

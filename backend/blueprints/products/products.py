@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import Blueprint, request, render_template, redirect, url_for, flash
 from database import db, InventoryItem
 from flask_login import current_user
 
@@ -8,6 +8,7 @@ products_bp = Blueprint('products', __name__, template_folder='templates')
 @products_bp.before_request
 def before_request():
     if not current_user.is_authenticated:
+        flash('You are not logged in.', 'warning')
         return redirect(url_for('login.login')) 
 
 @products_bp.route('/')

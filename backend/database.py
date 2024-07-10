@@ -45,4 +45,3 @@ class Transaction(db.Model):
     s_id = db.Column(db.Integer, db.ForeignKey('staff.s_id'), nullable=False)
     t_date = db.Column(db.Date, nullable=False)
     t_amount = db.Column(db.Integer, nullable=False)
-    t_category = db.Column(db.String, nullable=False)

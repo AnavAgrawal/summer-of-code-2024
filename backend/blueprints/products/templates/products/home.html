@@ -5,63 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Home</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .table th, .table td {
-            vertical-align: middle;
-        }
-        .btn {
-            margin-right: 5px;
-        }
-    </style>
 </head>
-<body>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="text-center">Inventory</h2>
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in inventory %}
+                        <tr>
+                            <td>{{ item.item_name }}</td>
+                            <td>{{ item.item_description }}</td>
+                            <td>{{ item.item_price }}</td>
+                            <td>{{ item.item_qty }}</td>
+                            <td>
+                                <a href="{{ url_for('products.update_item', item_id=item.item_sku) }}" class="btn btn-warning btn-sm">Update</a>
+                                <form action="{{ url_for('products.delete_item', item_id=item.item_sku) }}" method="POST" style="display:inline;">
+                                    <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 
-    <div class="container">
-        <h2 class="text-center">Inventory</h2>
-
-        <table class="table table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Item Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in inventory %}
-                <tr>
-                    <td>{{ item.item_name }}</td>
-                    <td>{{ item.item_description }}</td>
-                    <td>{{ item.item_price }}</td>
-                    <td>{{ item.item_qty }}</td>
-                    <td>
-                        <a href="{{ url_for('products.update_item', item_id=item.item_sku) }}" class="btn btn-warning btn-sm">Update</a>
-                        <form action="{{ url_for('products.delete_item', item_id=item.item_sku) }}" method="POST" style="display:inline;">
-                            <input type="submit" value="Delete" class="btn btn-danger btn-sm">
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <p><a href="{{ url_for('products.add_item') }}" class="btn btn-success">Add Item</a>
-        <a href="{{ url_for('login.index') }}" class="btn btn-secondary">Home</a></p>
+                <div class="text-center">
+                    <a href="{{ url_for('products.add_item') }}" class="btn btn-success">Add Item</a>
+                    <a href="{{ url_for('login.index') }}" class="btn btn-secondary">Home</a>
+                </div>
+            </div>
+        </div>
     </div>
 
 </body>
