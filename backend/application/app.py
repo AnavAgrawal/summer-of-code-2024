@@ -14,7 +14,6 @@ def create_app():
     # get url from .env file
     dotenv.load_dotenv()
     url = os.getenv('DATABASE_URL')
-    # url ='postgresql://postgres.thqxcgupvxmnnrmovubd:QTBqlDHX1Ih9ICoC@aws-0-ap-south-1.pooler.supabase.com:6543/postgres'
 
     app.config['SQLALCHEMY_DATABASE_URI'] = url
     app.config['SECRET_KEY'] = 'secret'
