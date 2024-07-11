@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask
 import dotenv
 import os
 from database import login_manager, bcrypt, db, Staff
@@ -14,7 +14,8 @@ def create_app():
     # get url from .env file
     dotenv.load_dotenv()
     url = os.getenv('DATABASE_URL')
-    
+    # url ='postgresql://postgres.thqxcgupvxmnnrmovubd:QTBqlDHX1Ih9ICoC@aws-0-ap-south-1.pooler.supabase.com:6543/postgres'
+
     app.config['SQLALCHEMY_DATABASE_URI'] = url
     app.config['SECRET_KEY'] = 'secret'
     app.config['EXPLAIN_TEMPLATE_LOADING'] = True
@@ -39,7 +40,6 @@ def create_app():
 def setup_db(app):
     with app.app_context():
         db.create_all()
-
 
 if __name__ == '__main__':
     app = create_app()
