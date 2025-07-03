@@ -3,3 +3,9 @@ machine-learning/week-2/train.csv
 machine-learning/week-2/lightning_logs
 /backend/application/myenv
 backend/application/.env
+/backend/application/__pycache__
+/backend/application/blueprints/staff/__pycache__
+/backend/application/blueprints/products/__pycache__
+/backend/application/blueprints/customers/__pycache__
+/backend/application/blueprints/login/__pycache__
+/backend/application/blueprints/products/__pycache__
